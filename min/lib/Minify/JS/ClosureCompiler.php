@@ -166,19 +166,7 @@ class Minify_JS_ClosureCompiler {
      */
     protected function getResponse($postBody)
     {
-        $allowUrlFopen = preg_match('/1|yes|on|true/i', ini_get('allow_url_fopen'));
-
-        if ($allowUrlFopen) {
-            $contents = file_get_contents($this->serviceUrl, false, stream_context_create(array(
-                'http' => array(
-                    'method' => 'POST',
-                    'header' => "Content-type: application/x-www-form-urlencoded\r\nConnection: close\r\n",
-                    'content' => $postBody,
-                    'max_redirects' => 0,
-                    'timeout' => 15,
-                )
-            )));
-        } elseif (defined('CURLOPT_POST')) {
+        if(defined('CURLOPT_POST')) {
             $ch = curl_init($this->serviceUrl);
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
